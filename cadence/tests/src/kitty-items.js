@@ -1,5 +1,5 @@
 import { mintFlow, executeScript, sendTransaction, deployContractByName } from "@onflow/flow-js-testing";
-import { getKittyAdminAddress } from "./common";
+import { getPhilosophersAdminAddress } from "./common";
 
 export const types = {
 	fishbowl: 1,
@@ -22,7 +22,7 @@ export const rarities = {
  * @returns {Promise<[{*} txResult, {error} error]>}
  * */
 export const deployKittyItems = async () => {
-	const KittyAdmin = await getKittyAdminAddress();
+	const KittyAdmin = await getPhilosophersAdminAddress();
 	await mintFlow(KittyAdmin, "10.0");
 
 	await deployContractByName({ to: KittyAdmin, name: "NonFungibleToken" });
@@ -60,7 +60,7 @@ export const getKittyItemSupply = async () => {
  * @returns {Promise<[{*} result, {error} error]>}
  * */
 export const mintKittyItem = async (recipient, itemType, itemRarity, cuts = [], royaltyDescriptions = [], royaltyBeneficiaries = []) => {
-	const KittyAdmin = await getKittyAdminAddress();
+	const KittyAdmin = await getPhilosophersAdminAddress();
 
 	const name = "kittyItems/mint_kitty_item";
 	const args = [recipient, itemType, itemRarity, cuts, royaltyDescriptions, royaltyBeneficiaries];

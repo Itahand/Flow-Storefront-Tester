@@ -1,7 +1,7 @@
-import Philosophers from "../../contracts/Philosophers.cdc"
+import PhilosophersNFT from "../../contracts/PhilosophersNFT.cdc"
 
 // This scripts returns the number of Philosopher currently in existence.
 
 pub fun main(): UInt64 {
-    return Philosophers.totalSupply
+    return PhilosophersNFT.totalSupply
 }

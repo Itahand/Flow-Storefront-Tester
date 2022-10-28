@@ -1,6 +1,6 @@
 import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
 import MetadataViews from "../../contracts/MetadataViews.cdc"
-import KittyItems from "../../contracts/KittyItems.cdc"
+import PhilosophersNFT from "../../contracts/PhilosophersNFT.cdc"
 
 pub struct KittyItem {
     pub let name: String
@@ -9,8 +9,8 @@ pub struct KittyItem {
 
     pub let itemID: UInt64
     pub let resourceID: UInt64
-    pub let kind: KittyItems.Kind
-    pub let rarity: KittyItems.Rarity
+    pub let philosopher: PhilosophersNFT.Philosopher
+    pub let rarity: PhilosophersNFT.Rarity
     pub let owner: Address
 
     init(
@@ -19,8 +19,8 @@ pub struct KittyItem {
         thumbnail: String,
         itemID: UInt64,
         resourceID: UInt64,
-        kind: KittyItems.Kind,
-        rarity: KittyItems.Rarity,
+        philosopher: PhilosophersNFT.Philosopher,
+        rarity: PhilosophersNFT.Rarity,
         owner: Address,
     ) {
         self.name = name
@@ -29,7 +29,7 @@ pub struct KittyItem {
 
         self.itemID = itemID
         self.resourceID = resourceID
-        self.kind = kind
+        self.philosopher = philosopher
         self.rarity = rarity
         self.owner = owner
     }
@@ -39,26 +39,26 @@ pub fun dwebURL(_ file: MetadataViews.IPFSFile): String {
     var url = "https://"
         .concat(file.cid)
         .concat(".ipfs.dweb.link/")
-    
+
     if let path = file.path {
         return url.concat(path)
     }
-    
+
     return url
 }
 
 pub fun main(address: Address, itemID: UInt64): KittyItem? {
-    if let collection = getAccount(address).getCapability<&KittyItems.Collection{NonFungibleToken.CollectionPublic, KittyItems.KittyItemsCollectionPublic}>(KittyItems.CollectionPublicPath).borrow() {
-        
+    if let collection = getAccount(address).getCapability<&PhilosophersNFT.Collection{NonFungibleToken.CollectionPublic, PhilosophersNFT.PhilosophersNFTCollectionPublic}>(PhilosophersNFT.CollectionPublicPath).borrow() {
+
         if let item = collection.borrowKittyItem(id: itemID) {
 
             if let view = item.resolveView(Type<MetadataViews.Display>()) {
 
                 let display = view as! MetadataViews.Display
-                
+
                 let owner: Address = item.owner!.address!
 
-                let ipfsThumbnail = display.thumbnail as! MetadataViews.IPFSFile     
+                let ipfsThumbnail = display.thumbnail as! MetadataViews.IPFSFile
 
                 return KittyItem(
                     name: display.name,
@@ -66,8 +66,8 @@ pub fun main(address: Address, itemID: UInt64): KittyItem? {
                     thumbnail: dwebURL(ipfsThumbnail),
                     itemID: itemID,
                     resourceID: item.uuid,
-                    kind: item.kind, 
-                    rarity: item.rarity, 
+                    philosopher: item.philosopher,
+                    rarity: item.rarity,
                     owner: address,
                 )
             }
