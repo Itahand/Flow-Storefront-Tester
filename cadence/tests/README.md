@@ -1,4 +1,4 @@
-# Kitty Items Test Suite
+# Philosophers Test Suite
 
 Tests here were created with the [JS Testing Framework](https://github.com/onflow/flow-js-testing).
 
