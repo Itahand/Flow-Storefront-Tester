@@ -1,6 +1,6 @@
 import path from "path";
 
-import { 
+import {
 	emulator,
 	init,
 	getAccountAddress,
@@ -9,22 +9,22 @@ import {
 	shallRevert,
 } from "@onflow/flow-js-testing";
 
-import { getKittyAdminAddress } from "../src/common";
+import { getPhilosophersAdminAddress } from "../src/common";
 import {
-	deployKittyItems,
-	getKittyItemCount,
-	getKittyItemSupply,
-	mintKittyItem,
-	setupKittyItemsOnAccount,
-	transferKittyItem,
+	deployPhilosophers,
+	getPhilosopherCount,
+	getPhilosophersNFTupply,
+	mintPhilosopher,
+	setupPhilosophersNFTOnAccount,
+	transferPhilosopher,
 	types,
 	rarities,
-} from "../src/kitty-items";
+} from "../src/philosophers";
 
 // We need to set timeout for a higher number, because some transactions might take up some time
 jest.setTimeout(100000);
 
-describe("Kitty Items", () => {
+describe("PhilosophersNFT", () => {
 	// Instantiate emulator and path to Cadence files
 	beforeEach(async () => {
 		const basePath = path.resolve(__dirname, "../../");
@@ -37,65 +37,65 @@ describe("Kitty Items", () => {
 		await emulator.stop();
 	});
 
-	it("should deploy KittyItems contract", async () => {
-		await shallPass(deployKittyItems());
+	it("should deploy PhilosofersNFT contract", async () => {
+		await shallPass(deployPhilosophers());
 	});
 
 	it("supply should be 0 after contract is deployed", async () => {
 		// Setup
-		await deployKittyItems();
-		const KittyAdmin = await getKittyAdminAddress();
-		await shallPass(setupKittyItemsOnAccount(KittyAdmin));
+		await deployPhilosophers();
+		const PhilosophersAdmin = await getPhilosophersAdminAddress();
+		await shallPass(setupPhilosophersNFTOnAccount(PhilosophersAdmin));
 
-		const [supply] = await shallResolve(getKittyItemSupply())
+		const [supply] = await shallResolve(getPhilosophersNFTupply())
 		expect(supply).toBe("0");
 	});
 
-	it("should be able to mint a kitty item", async () => {
+	it("should be able to mint a philosopher", async () => {
 		// Setup
-		await deployKittyItems();
+		await deployPhilosophers();
 		const Alice = await getAccountAddress("Alice");
-		await setupKittyItemsOnAccount(Alice);
+		await setupPhilosophersNFTOnAccount(Alice);
 
 		// Mint instruction for Alice account shall be resolved
-		await shallPass(mintKittyItem(Alice, types.fishbowl, rarities.blue));
+		await shallPass(mintPhilosopher(Alice, types.socrates, rarities.common));
 	});
 
 	it("should be able to create a new empty NFT Collection", async () => {
 		// Setup
-		await deployKittyItems();
+		await deployPhilosophers();
 		const Alice = await getAccountAddress("Alice");
-		await setupKittyItemsOnAccount(Alice);
+		await setupPhilosophersNFTOnAccount(Alice);
 
 		// shall be able te read Alice collection and ensure it's empty
-		const [itemCount] = await shallResolve(getKittyItemCount(Alice))
+		const [itemCount] = await shallResolve(getPhilosopherCount(Alice))
 		expect(itemCount).toBe("0");
 	});
 
 	it("should not be able to withdraw an NFT that doesn't exist in a collection", async () => {
 		// Setup
-		await deployKittyItems();
+		await deployPhilosophers();
 		const Alice = await getAccountAddress("Alice");
 		const Bob = await getAccountAddress("Bob");
-		await setupKittyItemsOnAccount(Alice);
-		await setupKittyItemsOnAccount(Bob);
+		await setupPhilosophersNFTOnAccount(Alice);
+		await setupPhilosophersNFTOnAccount(Bob);
 
 		// Transfer transaction shall fail for non-existent item
-		await shallRevert(transferKittyItem(Alice, Bob, 1337));
+		await shallRevert(transferPhilosopher(Alice, Bob, 1337));
 	});
 
 	it("should be able to withdraw an NFT and deposit to another accounts collection", async () => {
-		await deployKittyItems();
+		await deployPhilosophers();
 		const Alice = await getAccountAddress("Alice");
 		const Bob = await getAccountAddress("Bob");
-		await setupKittyItemsOnAccount(Alice);
-		await setupKittyItemsOnAccount(Bob);
+		await setupPhilosophersNFTOnAccount(Alice);
+		await setupPhilosophersNFTOnAccount(Bob);
 
 		// Mint instruction for Alice account shall be resolved
-		await shallPass(mintKittyItem(Alice, types.fishbowl, rarities.blue));
+		await shallPass(mintPhilosopher(Alice, types.socrates, rarities.common));
 
 		// Transfer transaction shall pass
-		await shallPass(transferKittyItem(Alice, Bob, 0));
+		await shallPass(transferPhilosopher(Alice, Bob, 0));
 	});
 
 	it("misc test", async () => {

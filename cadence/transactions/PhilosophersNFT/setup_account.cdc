@@ -2,7 +2,7 @@ import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
 import PhilosophersNFT from "../../contracts/PhilosophersNFT.cdc"
 import MetadataViews from "../../contracts/MetadataViews.cdc"
 
-// This transaction configures an account to hold Kitty Items.
+// This transaction configures an account to hold Philosophers.
 
 transaction {
     prepare(signer: AuthAccount) {

@@ -1,6 +1,6 @@
 import path from "path";
 
-import { 
+import {
 	emulator,
 	init,
 	getAccountAddress,
@@ -9,13 +9,13 @@ import {
 } from "@onflow/flow-js-testing";
 
 import { toUFix64 } from "../src/common";
-import { 
-	getKittyItemCount,
-	mintKittyItem,
-	getKittyItem,
+import {
+	getPhilosopherCount,
+	mintPhilosopher,
+	getPhilosopher,
 	types,
 	rarities,
-} from "../src/kitty-items";
+} from "../src/philosophers";
 import {
 	deployNFTStorefront,
 	createListing,
@@ -59,7 +59,7 @@ describe("NFT Storefront", () => {
 		await setupStorefrontOnAccount(Alice);
 
 		// Mint KittyItem for Alice's account
-		await shallPass(mintKittyItem(Alice, types.fishbowl, rarities.blue));
+		await shallPass(mintPhilosopher(Alice, types.socrates, rarities.common));
 
 		const itemID = 0;
 
@@ -73,7 +73,7 @@ describe("NFT Storefront", () => {
 		// Setup seller account
 		const Alice = await getAccountAddress("Alice");
 		await setupStorefrontOnAccount(Alice);
-		await mintKittyItem(Alice, types.fishbowl, rarities.blue);
+		await mintPhilosopher(Alice, types.socrates, rarities.common);
 
 		const itemId = 0;
 
@@ -90,7 +90,7 @@ describe("NFT Storefront", () => {
 
 		await shallPass(purchaseListing(Bob, parseInt(listingResourceID), Alice));
 
-		const [itemCount] = await getKittyItemCount(Bob);
+		const [itemCount] = await getPhilosopherCount(Bob);
 		expect(itemCount).toBe("1");
 
 		const [listingCount] = await getListingCount(Alice);
@@ -106,11 +106,11 @@ describe("NFT Storefront", () => {
 		await shallPass(setupStorefrontOnAccount(Alice));
 
 		// Mint instruction shall pass
-		await shallPass(mintKittyItem(Alice, types.fishbowl, rarities.blue));
+		await shallPass(mintPhilosopher(Alice, types.socrates, rarities.common));
 
 		const itemId = 0;
 
-		await getKittyItem(Alice, itemId);
+		await getPhilosopher(Alice, itemId);
 
 		// Listing item for sale shall pass
 		const [sellItemTransactionResult] = await shallPass(createListing(Alice, itemId, toUFix64(1.11)));
