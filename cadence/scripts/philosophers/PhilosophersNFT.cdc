@@ -1,5 +1,5 @@
-import NonFungibleToken from "./NonFungibleToken.cdc"
-import MetadataViews from "./MetadataViews.cdc"
+import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
+import MetadataViews from "../../contracts/MetadataViews.cdc"
 
 pub contract PhilosophersNFT: NonFungibleToken {
 
@@ -47,13 +47,13 @@ pub contract PhilosophersNFT: NonFungibleToken {
         pub case nietzsche
     }
 
-    pub fun philosopherToString(_ philosopher: Philosopher): String {
-        switch philosopher {
-            case philosopher.socrates:
+    pub fun philosopherToString(_ kind: Philosopher): String {
+        switch kind {
+            case Philosopher.socrates:
                 return "Socrates"
-            case philosopher.spinoza:
+            case Philosopher.spinoza:
                 return "Spinoza"
-            case philosopher.nietzsche:
+            case Philosopher.nietzsche:
                 return "Nietzsche"
         }
 
@@ -400,10 +400,9 @@ pub contract PhilosophersNFT: NonFungibleToken {
     init() {
         // set rarity price mapping
         self.itemRarityPriceMap = {
-            Rarity.gold: 125.0,
-            Rarity.epic: 25.0,
-            Rarity.rare: 5.0,
-            Rarity.common: 1.0
+            Rarity.epic: 125.0,
+            Rarity.rare: 25.0,
+            Rarity.common: 5.0
         }
 
         self.images = {
@@ -421,7 +420,7 @@ pub contract PhilosophersNFT: NonFungibleToken {
                 Rarity.common: "bafybeialhf5ga6owaygebp6xt4vdybc7aowatrscwlwmxd444fvwyhcskq",
                 Rarity.rare: "bafybeihjy4rcbvnw6bcz3zbirq5u454aagnyzjhlrffgkc25wgdcw4csoe",
                 Rarity.epic: "bafybeidbua4rigbcpwutpkqvd7spppvxemwn6o2ifhq6xam4sqlngzrfiq"
-            },
+            }
         }
 
         // Initialize the total supply

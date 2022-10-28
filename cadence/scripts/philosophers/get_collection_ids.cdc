@@ -1,5 +1,5 @@
 import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
-import PhilosophersNFT from "../../contracts/PhilosophersNFT.cdc"
+import PhilosophersNFT from "./PhilosophersNFT.cdc"
 
 // This script returns an array of all the NFT IDs in an account's collection.
 
