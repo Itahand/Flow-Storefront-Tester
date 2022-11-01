@@ -2,7 +2,7 @@ import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
 import PhilosophersNFT from "../../contracts/PhilosophersNFT.cdc"
 import FungibleToken from "../../contracts/FungibleToken.cdc"
 import FlowToken from "../../contracts/FlowToken.cdc"
-//import MetadataViews from "../../contracts/MetadataViews.cdc"
+import MetadataViews from "../../contracts/MetadataViews.cdc"
 import NFTStorefrontV2 from "../../contracts/NFTStorefrontV2.cdc"
 
 // This transction uses the NFTMinter resource to mint a new NFT.

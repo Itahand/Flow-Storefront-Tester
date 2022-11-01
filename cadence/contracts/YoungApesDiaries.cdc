@@ -1,10 +1,10 @@
 import NonFungibleToken from "./NonFungibleToken.cdc"
 import MetadataViews from "./MetadataViews.cdc"
 
-pub contract PhilosophersNFT: NonFungibleToken {
+pub contract YoungApesDairies: NonFungibleToken {
 
     // totalSupply
-    // The total number of PhilosophersNFT that have been minted
+    // The total number of YoungApesDairies that have been minted
     //
     pub var totalSupply: UInt64
 
@@ -74,28 +74,28 @@ pub contract PhilosophersNFT: NonFungibleToken {
         return self.itemRarityPriceMap[rarity]!
     }
 
-    // A Kitty Item as an NFT
+    // A Young Ape as an NFT
     //
     pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
         pub let id: UInt64
 
         pub fun name(): String {
-            return PhilosophersNFT.rarityToString(self.rarity)
+            return YoungApesDairies.rarityToString(self.rarity)
                 .concat(" ")
-                .concat(PhilosophersNFT.philosopherToString(self.philosopher))
+                .concat(YoungApesDairies.philosopherToString(self.philosopher))
         }
 
         pub fun description(): String {
             return "A "
-                .concat(PhilosophersNFT.rarityToString(self.rarity).toLower())
+                .concat(YoungApesDairies.rarityToString(self.rarity).toLower())
                 .concat(" ")
-                .concat(PhilosophersNFT.philosopherToString(self.philosopher).toLower())
+                .concat(YoungApesDairies.philosopherToString(self.philosopher).toLower())
                 .concat(" with serial number ")
                 .concat(self.id.toString())
         }
 
         pub fun imageCID(): String {
-            return PhilosophersNFT.images[self.philosopher]![self.rarity]!
+            return YoungApesDairies.images[self.philosopher]![self.rarity]!
         }
 
         pub fun thumbnail(): MetadataViews.IPFSFile {
@@ -149,7 +149,7 @@ pub contract PhilosophersNFT: NonFungibleToken {
                 case Type<MetadataViews.Editions>():
                     // There is no max number of NFTs that can be minted from this contract
                     // so the max edition field value is set to nil
-                    let editionInfo = MetadataViews.Edition(name: "PhilosophersNFT NFT Edition", number: self.id, max: nil)
+                    let editionInfo = MetadataViews.Edition(name: "YoungApesDairies NFT Edition", number: self.id, max: nil)
                     let editionList: [MetadataViews.Edition] = [editionInfo]
                     return MetadataViews.Editions(
                         editionList
@@ -166,14 +166,14 @@ pub contract PhilosophersNFT: NonFungibleToken {
                     return MetadataViews.ExternalURL("https://kitty-items.flow.com/".concat(self.id.toString()))
                 case Type<MetadataViews.NFTCollectionData>():
                     return MetadataViews.NFTCollectionData(
-                        storagePath: PhilosophersNFT.CollectionStoragePath,
-                        publicPath: PhilosophersNFT.CollectionPublicPath,
-                        providerPath: /private/PhilosophersNFTCollection,
-                        publicCollection: Type<&PhilosophersNFT.Collection{PhilosophersNFT.PhilosophersNFTCollectionPublic}>(),
-                        publicLinkedType: Type<&PhilosophersNFT.Collection{PhilosophersNFT.PhilosophersNFTCollectionPublic,NonFungibleToken.CollectionPublic,NonFungibleToken.Receiver,MetadataViews.ResolverCollection}>(),
-                        providerLinkedType: Type<&PhilosophersNFT.Collection{PhilosophersNFT.PhilosophersNFTCollectionPublic,NonFungibleToken.CollectionPublic,NonFungibleToken.Provider,MetadataViews.ResolverCollection}>(),
+                        storagePath: YoungApesDairies.CollectionStoragePath,
+                        publicPath: YoungApesDairies.CollectionPublicPath,
+                        providerPath: /private/YoungApesDairiesCollection,
+                        publicCollection: Type<&YoungApesDairies.Collection{YoungApesDairies.YoungApesDairiesCollectionPublic}>(),
+                        publicLinkedType: Type<&YoungApesDairies.Collection{YoungApesDairies.YoungApesDairiesCollectionPublic,NonFungibleToken.CollectionPublic,NonFungibleToken.Receiver,MetadataViews.ResolverCollection}>(),
+                        providerLinkedType: Type<&YoungApesDairies.Collection{YoungApesDairies.YoungApesDairiesCollectionPublic,NonFungibleToken.CollectionPublic,NonFungibleToken.Provider,MetadataViews.ResolverCollection}>(),
                         createEmptyCollectionFunction: (fun (): @NonFungibleToken.Collection {
-                            return <-PhilosophersNFT.createEmptyCollection()
+                            return <-YoungApesDairies.createEmptyCollection()
                         })
                     )
                 case Type<MetadataViews.NFTCollectionDisplay>():
@@ -184,7 +184,7 @@ pub contract PhilosophersNFT: NonFungibleToken {
                         mediaType: "image/svg+xml"
                     )
                     return MetadataViews.NFTCollectionDisplay(
-                        name: "The PhilosophersNFT Collection",
+                        name: "The YoungApesDairies Collection",
                         description: "This collection is used as an example to help you develop your next Flow NFT.",
                         externalURL: MetadataViews.ExternalURL("https://kitty-items.flow.com/"),
                         squareImage: media,
@@ -214,14 +214,14 @@ pub contract PhilosophersNFT: NonFungibleToken {
         }
     }
 
-    // This is the interface that users can cast their PhilosophersNFT Collection as
-    // to allow others to deposit PhilosophersNFT into their Collection. It also allows for reading
-    // the details of PhilosophersNFT in the Collection.
-    pub resource interface PhilosophersNFTCollectionPublic {
+    // This is the interface that users can cast their YoungApesDairies Collection as
+    // to allow others to deposit YoungApesDairies into their Collection. It also allows for reading
+    // the details of YoungApesDairies in the Collection.
+    pub resource interface YoungApesDairiesCollectionPublic {
         pub fun deposit(token: @NonFungibleToken.NFT)
         pub fun getIDs(): [UInt64]
         pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
-        pub fun borrowKittyItem(id: UInt64): &PhilosophersNFT.NFT? {
+        pub fun borrowKittyItem(id: UInt64): &YoungApesDairies.NFT? {
             // If the result isn't nil, the id of the returned reference
             // should be the same as the argument to the function
             post {
@@ -234,7 +234,7 @@ pub contract PhilosophersNFT: NonFungibleToken {
     // Collection
     // A collection of KittyItem NFTs owned by an account
     //
-    pub resource Collection: PhilosophersNFTCollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
+    pub resource Collection: YoungApesDairiesCollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
         // dictionary of NFT conforming tokens
         // NFT is a resource type with an `UInt64` ID field
         //
@@ -260,7 +260,7 @@ pub contract PhilosophersNFT: NonFungibleToken {
         // takes a NFT and adds it to the collections dictionary
         // and adds the ID to the id array
         pub fun deposit(token: @NonFungibleToken.NFT) {
-            let token <- token as! @PhilosophersNFT.NFT
+            let token <- token as! @YoungApesDairies.NFT
 
             let id: UInt64 = token.id
 
@@ -290,11 +290,11 @@ pub contract PhilosophersNFT: NonFungibleToken {
         // exposing all of its fields (including the typeID & rarityID).
         // This is safe as there are no functions that can be called on the KittyItem.
         //
-        pub fun borrowKittyItem(id: UInt64): &PhilosophersNFT.NFT? {
+        pub fun borrowKittyItem(id: UInt64): &YoungApesDairies.NFT? {
             if self.ownedNFTs[id] != nil {
                 // Create an authorized reference to allow downcasting
                 let ref = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
-                return ref as! &PhilosophersNFT.NFT
+                return ref as! &YoungApesDairies.NFT
             } else {
                 return nil
             }
@@ -302,7 +302,7 @@ pub contract PhilosophersNFT: NonFungibleToken {
 
         pub fun borrowViewResolver(id: UInt64): &AnyResource{MetadataViews.Resolver} {
             let nft = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
-            let kittyItem = nft as! &PhilosophersNFT.NFT
+            let kittyItem = nft as! &YoungApesDairies.NFT
             return kittyItem as &AnyResource{MetadataViews.Resolver}
         }
 
@@ -345,8 +345,8 @@ pub contract PhilosophersNFT: NonFungibleToken {
             // metadata["foo"] = "bar"
 
             // create a new NFT
-            var newNFT <- create PhilosophersNFT.NFT(
-                id: PhilosophersNFT.totalSupply,
+            var newNFT <- create YoungApesDairies.NFT(
+                id: YoungApesDairies.totalSupply,
                 royalties: royalties,
                 metadata: metadata,
                 philosopher: philosopher,
@@ -357,19 +357,19 @@ pub contract PhilosophersNFT: NonFungibleToken {
             recipient.deposit(token: <-newNFT)
 
             emit Minted(
-                id: PhilosophersNFT.totalSupply,
+                id: YoungApesDairies.totalSupply,
                 philosopher: philosopher.rawValue,
                 rarity: rarity.rawValue,
             )
 
-            PhilosophersNFT.totalSupply = PhilosophersNFT.totalSupply + UInt64(1)
+            YoungApesDairies.totalSupply = YoungApesDairies.totalSupply + UInt64(1)
         }
 
         // Update NFT images for new type
         pub fun addNewImagesForphilosopher(from: AuthAccount, newImages: {Philosopher: {Rarity: String}}) {
-            let philosopherValue = PhilosophersNFT.images.containsKey(newImages.keys[0])
+            let philosopherValue = YoungApesDairies.images.containsKey(newImages.keys[0])
             if(!philosopherValue) {
-                PhilosophersNFT.images.insert(key: newImages.keys[0], newImages.values[0])
+                YoungApesDairies.images.insert(key: newImages.keys[0], newImages.values[0])
                 emit ImagesAddedForNewPhilosopher(
                     philosopher: newImages.keys[0].rawValue,
                 )
@@ -381,16 +381,16 @@ pub contract PhilosophersNFT: NonFungibleToken {
 
     // fetch
     // Get a reference to a KittyItem from an account's Collection, if available.
-    // If an account does not have a PhilosophersNFT.Collection, panic.
+    // If an account does not have a YoungApesDairies.Collection, panic.
     // If it has a collection but does not contain the itemID, return nil.
     // If it has a collection and that collection contains the itemID, return a reference to that.
     //
-    pub fun fetch(_ from: Address, itemID: UInt64): &PhilosophersNFT.NFT? {
+    pub fun fetch(_ from: Address, itemID: UInt64): &YoungApesDairies.NFT? {
         let collection = getAccount(from)
-            .getCapability(PhilosophersNFT.CollectionPublicPath)!
-            .borrow<&PhilosophersNFT.Collection{PhilosophersNFT.PhilosophersNFTCollectionPublic}>()
+            .getCapability(YoungApesDairies.CollectionPublicPath)!
+            .borrow<&YoungApesDairies.Collection{YoungApesDairies.YoungApesDairiesCollectionPublic}>()
             ?? panic("Couldn't get collection")
-        // We trust PhilosophersNFT.Collection.borowKittyItem to get the correct itemID
+        // We trust YoungApesDairies.Collection.borowKittyItem to get the correct itemID
         // (it checks it before returning it).
         return collection.borrowKittyItem(id: itemID)
     }
@@ -427,16 +427,16 @@ pub contract PhilosophersNFT: NonFungibleToken {
         self.totalSupply = 0
 
         // Set our named paths
-        self.CollectionStoragePath = /storage/PhilosophersNFTCollectionV1
-        self.CollectionPublicPath = /public/PhilosophersNFTCollectionV1
-        self.MinterStoragePath = /storage/PhilosophersNFTMinterV1
+        self.CollectionStoragePath = /storage/YoungApesDairiesCollectionV1
+        self.CollectionPublicPath = /public/YoungApesDairiesCollectionV1
+        self.MinterStoragePath = /storage/YoungApesDairiesMinterV1
 
         // Create a Collection resource and save it to storage
         let collection <- create Collection()
         self.account.save(<-collection, to: self.CollectionStoragePath)
 
         // Create a public capability for the collection
-        self.account.link<&PhilosophersNFT.Collection{NonFungibleToken.CollectionPublic, PhilosophersNFT.PhilosophersNFTCollectionPublic, MetadataViews.ResolverCollection}>(
+        self.account.link<&YoungApesDairies.Collection{NonFungibleToken.CollectionPublic, YoungApesDairies.YoungApesDairiesCollectionPublic, MetadataViews.ResolverCollection}>(
             self.CollectionPublicPath,
             target: self.CollectionStoragePath
         )

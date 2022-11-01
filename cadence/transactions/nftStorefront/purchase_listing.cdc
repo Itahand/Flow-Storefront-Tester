@@ -1,31 +1,31 @@
 import FungibleToken from "../../contracts/FungibleToken.cdc"
 import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
 import FlowToken from "../../contracts/FlowToken.cdc"
-import KittyItems from "../../contracts/KittyItems.cdc"
+import PhilosophersNFT from "../../contracts/PhilosophersNFT.cdc"
 import NFTStorefrontV2 from "../../contracts/NFTStorefrontV2.cdc"
 
-pub fun getOrCreateCollection(account: AuthAccount): &KittyItems.Collection{NonFungibleToken.Receiver} {
-    if let collectionRef = account.borrow<&KittyItems.Collection>(from: KittyItems.CollectionStoragePath) {
+pub fun getOrCreateCollection(account: AuthAccount): &PhilosophersNFT.Collection{NonFungibleToken.Receiver} {
+    if let collectionRef = account.borrow<&PhilosophersNFT.Collection>(from: PhilosophersNFT.CollectionStoragePath) {
         return collectionRef
     }
 
     // create a new empty collection
-    let collection <- KittyItems.createEmptyCollection() as! @KittyItems.Collection
+    let collection <- PhilosophersNFT.createEmptyCollection() as! @PhilosophersNFT.Collection
 
-    let collectionRef = &collection as &KittyItems.Collection
-    
+    let collectionRef = &collection as &PhilosophersNFT.Collection
+
     // save it to the account
-    account.save(<-collection, to: KittyItems.CollectionStoragePath)
+    account.save(<-collection, to: PhilosophersNFT.CollectionStoragePath)
 
     // create a public capability for the collection
-    account.link<&KittyItems.Collection{NonFungibleToken.CollectionPublic, KittyItems.KittyItemsCollectionPublic}>(KittyItems.CollectionPublicPath, target: KittyItems.CollectionStoragePath)
+    account.link<&PhilosophersNFT.Collection{NonFungibleToken.CollectionPublic, PhilosophersNFT.PhilosophersNFTCollectionPublic}>(PhilosophersNFT.CollectionPublicPath, target: PhilosophersNFT.CollectionStoragePath)
 
     return collectionRef
 }
 
 transaction(listingResourceID: UInt64, storefrontAddress: Address) {
     let paymentVault: @FungibleToken.Vault
-    let kittyItemsCollection: &KittyItems.Collection{NonFungibleToken.Receiver}
+    let PhilosophersNFTCollection: &PhilosophersNFT.Collection{NonFungibleToken.Receiver}
     let storefront: &NFTStorefrontV2.Storefront{NFTStorefrontV2.StorefrontPublic}
     let listing: &NFTStorefrontV2.Listing{NFTStorefrontV2.ListingPublic}
 
@@ -48,7 +48,7 @@ transaction(listingResourceID: UInt64, storefrontAddress: Address) {
             ?? panic("Cannot borrow FlowToken vault from account storage")
         self.paymentVault <- mainFlowVault.withdraw(amount: price)
 
-        self.kittyItemsCollection = getOrCreateCollection(account: account)
+        self.PhilosophersNFTCollection = getOrCreateCollection(account: account)
     }
 
     execute {
@@ -57,7 +57,7 @@ transaction(listingResourceID: UInt64, storefrontAddress: Address) {
             commissionRecipient: nil
         )
 
-        self.kittyItemsCollection.deposit(token: <-item)
+        self.PhilosophersNFTCollection.deposit(token: <-item)
         self.storefront.cleanupPurchasedListings(listingResourceID: listingResourceID)
     }
 }

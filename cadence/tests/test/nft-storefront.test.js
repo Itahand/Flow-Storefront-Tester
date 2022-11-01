@@ -58,7 +58,7 @@ describe("NFT Storefront", () => {
 		const Alice = await getAccountAddress("Alice");
 		await setupStorefrontOnAccount(Alice);
 
-		// Mint KittyItem for Alice's account
+		// Mint Philosopher NFT for Alice's account
 		await shallPass(mintPhilosopher(Alice, types.socrates, rarities.common));
 
 		const itemID = 0;

@@ -1,7 +1,7 @@
 import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
 import MetadataViews from "../../contracts/MetadataViews.cdc"
 import NFTStorefrontV2 from "../../contracts/NFTStorefrontV2.cdc"
-import KittyItems from "../../contracts/KittyItems.cdc"
+import PhilosophersNFT from "../../contracts/PhilosophersNFT.cdc"
 
 pub struct ListingItem {
     pub let name: String
@@ -11,8 +11,8 @@ pub struct ListingItem {
 
     pub let itemID: UInt64
     pub let resourceID: UInt64
-    pub let kind: KittyItems.Kind
-    pub let rarity: KittyItems.Rarity
+    pub let philosopher: PhilosophersNFT.Philosopher
+    pub let rarity: PhilosophersNFT.Rarity
     pub let owner: Address
     pub let price: UFix64
 
@@ -23,8 +23,8 @@ pub struct ListingItem {
         description: String,
         itemID: UInt64,
         resourceID: UInt64,
-        kind: KittyItems.Kind,
-        rarity: KittyItems.Rarity,
+        philosopher: PhilosophersNFT.Philosopher,
+        rarity: PhilosophersNFT.Rarity,
         owner: Address,
         price: UFix64
     ) {
@@ -35,7 +35,7 @@ pub struct ListingItem {
 
         self.itemID = itemID
         self.resourceID = resourceID
-        self.kind = kind
+        self.philosopher = philosopher
         self.rarity = rarity
         self.owner = owner
         self.price = price
@@ -66,7 +66,7 @@ pub fun main(address: Address, listingResourceID: UInt64): ListingItem? {
             let itemID = details.nftID
             let itemPrice = details.salePrice
 
-            if let collection = getAccount(address).getCapability<&KittyItems.Collection{NonFungibleToken.CollectionPublic, KittyItems.KittyItemsCollectionPublic}>(KittyItems.CollectionPublicPath).borrow() {
+            if let collection = getAccount(address).getCapability<&PhilosophersNFT.Collection{NonFungibleToken.CollectionPublic, PhilosophersNFT.PhilosophersNFTCollectionPublic}>(PhilosophersNFT.CollectionPublicPath).borrow() {
 
                 if let item = collection.borrowKittyItem(id: itemID) {
 
@@ -85,7 +85,7 @@ pub fun main(address: Address, listingResourceID: UInt64): ListingItem? {
                             description: display.description,
                             itemID: itemID,
                             resourceID: item.uuid,
-                            kind: item.kind,
+                            philosopher: item.philosopher,
                             rarity: item.rarity,
                             owner: address,
                             price: itemPrice
